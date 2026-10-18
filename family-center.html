@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Safety Center – ChildSafe Alert</title>
+  <meta name="description" content="Complete family safety overview — manage child profiles, safe zones, emergency contacts, and family analytics.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="emergency-banner"><i class="fa-solid fa-triangle-exclamation"></i><span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span><i class="fa-solid fa-triangle-exclamation"></i></div>
+<nav class="navbar" style="top:36px"><div class="navbar-inner"><a href="index.html" class="navbar-brand"><div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div><div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Family Center</span></div></a><nav class="navbar-nav" id="mainNav"></nav><div class="navbar-actions"><div class="parent-avatar" id="navAvatar" onclick="window.location.href='parent-dashboard.html'"></div><button class="btn btn-ghost btn-sm" onclick="CSA.logoutParent();window.location.href='login.html'"><i class="fa-solid fa-right-from-bracket"></i></button><button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button></div></div></nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<!-- Page Header -->
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="parent-dashboard.html">Dashboard</a><i class="fa-solid fa-chevron-right"></i><span>Family Center</span></div>
+    <h1><i class="fa-solid fa-house-user" style="margin-right:.5rem"></i> Family Safety Center</h1>
+    <p>Manage your family's safety profile, safe zones, and emergency contacts.</p>
+  </div>
+</div>
+
+<!-- Parent Profile Card -->
+<div class="family-section">
+  <div class="family-profile-card" id="parentProfile"></div>
+</div>
+
+<!-- Children Profiles -->
+<div class="family-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+    <h3 class="dash-section-title" style="margin:0"><i class="fa-solid fa-children" style="color:var(--primary)"></i> Children Profiles</h3>
+  </div>
+  <div id="familyChildrenGrid" class="children-grid"></div>
+</div>
+
+<!-- Safe Zone Manager -->
+<div class="family-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+    <h3 class="dash-section-title" style="margin:0"><i class="fa-solid fa-shield-check" style="color:var(--success)"></i> Safe Zone Manager</h3>
+    <button class="btn btn-primary btn-sm" onclick="openSafeZoneModal()"><i class="fa-solid fa-plus"></i> Add Safe Zone</button>
+  </div>
+  <div id="safeZonesList" class="safe-zones-grid"></div>
+</div>
+
+<!-- Emergency Contacts -->
+<div class="family-section">
+  <h3 class="dash-section-title"><i class="fa-solid fa-phone-volume" style="color:var(--danger)"></i> Emergency Contacts Directory</h3>
+  <div id="emergencyContacts" class="emergency-contacts-grid"></div>
+</div>
+
+<!-- Family Stats -->
+<div class="family-section">
+  <h3 class="dash-section-title"><i class="fa-solid fa-chart-pie" style="color:var(--info)"></i> Family Statistics</h3>
+  <div class="family-stats-grid" id="familyStats"></div>
+</div>
+
+<!-- Safety Score AI Panel -->
+<div class="family-section" id="safety-scores">
+  <h3 class="dash-section-title"><i class="fa-solid fa-brain" style="color:#06b6d4"></i> Safety Score AI</h3>
+  <p style="color:var(--text-3);font-size:.875rem;margin-bottom:1.25rem">AI-powered safety analysis based on wristband status, geofence, alerts, guardian proximity, and more.</p>
+  <div id="safetyScorePanel"></div>
+</div>
+
+<!-- Add Safe Zone Modal -->
+<div class="modal-backdrop" id="safeZoneModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header"><div class="modal-title"><i class="fa-solid fa-shield-check" style="color:var(--success);margin-right:.5rem"></i> Add Safe Zone</div><button class="modal-close" onclick="closeModal('safeZoneModal')"><i class="fa-solid fa-times"></i></button></div>
+    <div class="modal-body">
+      <form onsubmit="handleAddSafeZone(event)">
+        <div class="form-group"><label class="form-label">Child</label><select class="form-select" id="szChild" required></select></div>
+        <div class="form-group"><label class="form-label">Zone Name</label><input type="text" class="form-input" id="szName" placeholder="e.g. School Zone, Home" required></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">Zone Type</label><select class="form-select" id="szType"><option value="school">🏫 School</option><option value="festival">🎪 Festival</option><option value="mall">🏬 Mall</option><option value="playground">🏕️ Playground</option><option value="home">🏠 Home</option><option value="custom">📍 Custom</option></select></div>
+          <div class="form-group"><label class="form-label">Radius</label><select class="form-select" id="szRadius"><option value="50">50 meters</option><option value="100" selected>100 meters</option><option value="200">200 meters</option><option value="500">500 meters</option></select></div>
+        </div>
+        <div class="modal-footer" style="padding:0;border:none;margin-top:1rem"><button type="button" class="btn btn-ghost" onclick="closeModal('safeZoneModal')">Cancel</button><button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Create Zone</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"><div class="footer-bottom"><span>&copy; 2026 ChildSafe Alert &middot; Family Center</span><div class="footer-bottom-links"><a href="parent-dashboard.html">Dashboard</a><a href="history.html">History</a></div></div></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/family-center.js"></script>
+</body>
+</html>

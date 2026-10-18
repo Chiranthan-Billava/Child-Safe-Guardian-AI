@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Alerts – ChildSafe Alert</title>
+  <meta name="description" content="View all active missing child alerts. Search, filter, and help locate missing children in your area.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text">
+        <span class="brand-name">ChildSafe Alert</span>
+        <span class="brand-tagline">Reunification System</span>
+      </div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Public</span><span class="role-dot"></span></button>
+      <a href="report.html" class="btn btn-accent btn-sm"><i class="fa-solid fa-circle-plus"></i> Report</a>
+      <button class="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<!-- Page Header -->
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a><i class="fa-solid fa-chevron-right"></i><span>Active Alerts</span></div>
+    <h1><i class="fa-solid fa-bell"></i> Active Alerts</h1>
+    <p>Real-time missing child alerts. Help us find these children by reporting sightings.</p>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="alerts-toolbar">
+  <div class="alerts-toolbar-inner">
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+      <div class="search-bar" style="flex:1;min-width:220px;max-width:360px">
+        <i class="fa-solid fa-magnifying-glass search-bar-icon"></i>
+        <input type="text" class="form-input" id="searchInput" placeholder="Search by name, location, case ID...">
+      </div>
+      <select class="form-select" id="statusFilter" style="width:160px;padding:.5625rem .875rem;font-size:.8125rem">
+        <option value="">All Statuses</option>
+        <option value="active">Active</option>
+        <option value="searching">Searching</option>
+        <option value="investigating">Investigating</option>
+        <option value="found">Found</option>
+      </select>
+      <select class="form-select" id="genderFilter" style="width:130px;padding:.5625rem .875rem;font-size:.8125rem">
+        <option value="">All Genders</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <select class="form-select" id="sortBy" style="width:160px;padding:.5625rem .875rem;font-size:.8125rem">
+        <option value="latest">Sort: Latest</option>
+        <option value="priority">Sort: Priority First</option>
+        <option value="name">Sort: Name A–Z</option>
+        <option value="age">Sort: Age</option>
+      </select>
+      <span class="text-sm text-muted" id="resultCount">Loading...</span>
+    </div>
+  </div>
+</div>
+
+<!-- Alerts Grid -->
+<div class="cases-grid" id="alertsGrid"></div>
+
+<!-- Pagination -->
+<div class="pagination" id="pagination"></div>
+
+<!-- Empty State -->
+<div id="emptyState" class="empty-state" style="display:none">
+  <div class="empty-state-icon"><i class="fa-solid fa-child"></i></div>
+  <h3>No alerts found</h3>
+  <p>No cases match your current filters. Try adjusting your search or filters.</p>
+  <button class="btn btn-outline" onclick="clearFilters()"><i class="fa-solid fa-rotate"></i> Clear Filters</button>
+</div>
+
+<footer class="footer" style="margin-top:2rem">
+  <div class="footer-bottom" style="border-top:none;padding-top:1.5rem">
+    <span style="color:rgba(255,255,255,.5)">© 2026 ChildSafe Alert</span>
+    <div class="footer-bottom-links"><a href="index.html">Home</a><a href="report.html">Report</a><a href="kiosk.html">Kiosk Mode</a></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/alerts.js"></script>
+</body>
+</html>

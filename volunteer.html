@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer Dashboard – ChildSafe Alert</title>
+  <meta name="description" content="Volunteer coordination dashboard for ChildSafe Alert. Monitor active alerts and report sightings.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="notif-btn" id="notifBtn"><i class="fa-solid fa-bell"></i><span class="notif-badge" id="notifCount">5</span></button>
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Volunteer</span><span class="role-dot"></span></button>
+      <button class="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<div style="margin-top:calc(36px + var(--nav-height));background:var(--bg)">
+  <!-- Welcome Banner -->
+  <div style="background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:white;padding:1.5rem 1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+    <div>
+      <div style="font-size:1.25rem;font-weight:800">Welcome, <span id="volunteerName">Volunteer</span> 👋</div>
+      <div style="font-size:.875rem;opacity:.8;margin-top:.25rem">Assigned Zone: <span id="volunteerZone" style="font-weight:600">All Areas</span> &nbsp;·&nbsp; <span id="onlineStatus">🟢 Active</span></div>
+    </div>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <a href="report.html" class="btn btn-accent btn-sm"><i class="fa-solid fa-circle-plus"></i> Report Child</a>
+      <button class="btn btn-outline-white btn-sm" onclick="selectVolunteer()"><i class="fa-solid fa-user-gear"></i> Switch Volunteer</button>
+    </div>
+  </div>
+
+  <!-- Dashboard Layout -->
+  <div style="display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 200px)">
+    <!-- Sidebar -->
+    <div class="sidebar" style="top:calc(36px + var(--nav-height))">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <div class="sidebar-link active" onclick="showSection('alerts')"><i class="fa-solid fa-bell"></i> Active Alerts <span class="tab-count" id="sidebarAlertCount" style="margin-left:auto">0</span></div>
+        <div class="sidebar-link" onclick="showSection('sightings')"><i class="fa-solid fa-eye"></i> Recent Sightings</div>
+        <div class="sidebar-link" onclick="showSection('zones')"><i class="fa-solid fa-map"></i> Search Zones</div>
+        <div class="sidebar-link" onclick="showSection('notifications')"><i class="fa-solid fa-bell"></i> Notifications <span class="notif-badge" style="position:static;width:auto;height:auto;border-radius:10px;padding:2px 6px;font-size:.65rem;margin-left:auto;border:none">5</span></div>
+        <div class="sidebar-link" onclick="showSection('volunteers')"><i class="fa-solid fa-users"></i> Volunteer Team</div>
+      </div>
+      <div class="sidebar-section" style="margin-top:1rem">
+        <div class="sidebar-label">Quick Actions</div>
+        <div class="sidebar-link" onclick="window.location='sighting.html'"><i class="fa-solid fa-location-arrow"></i> Report Sighting</div>
+        <div class="sidebar-link" onclick="window.location='admin.html'"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
+        <div class="sidebar-link" onclick="window.location='kiosk.html'"><i class="fa-solid fa-display"></i> Kiosk Mode</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+      <!-- Stats Row -->
+      <div class="grid grid-4" style="margin-bottom:1.75rem">
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-bell"></i></div>
+          <div class="stat-info"><div class="stat-value" id="statActive2">0</div><div class="stat-label">Active Alerts</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-eye"></i></div>
+          <div class="stat-info"><div class="stat-value" id="statSightings2">0</div><div class="stat-label">Total Sightings</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-check-circle"></i></div>
+          <div class="stat-info"><div class="stat-value" id="statFound2">0</div><div class="stat-label">Children Found</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+          <div class="stat-info"><div class="stat-value" id="statVols2">0</div><div class="stat-label">Active Volunteers</div></div>
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <div id="section-alerts">
+        <div class="dashboard-header">
+          <div><div class="dashboard-title">Active Alerts</div><div class="dashboard-sub">Cases currently being searched</div></div>
+          <a href="alerts.html" class="btn btn-outline btn-sm"><i class="fa-solid fa-arrow-right"></i> Full View</a>
+        </div>
+        <div id="volAlertsList"></div>
+      </div>
+
+      <div id="section-sightings" style="display:none">
+        <div class="dashboard-header">
+          <div><div class="dashboard-title">Recent Sightings</div><div class="dashboard-sub">Latest reports from the public</div></div>
+        </div>
+        <div id="sightingsList" style="display:flex;flex-direction:column;gap:.75rem"></div>
+      </div>
+
+      <div id="section-zones" style="display:none">
+        <div class="dashboard-header">
+          <div><div class="dashboard-title">Search Zones</div><div class="dashboard-sub">Assigned coverage areas</div></div>
+        </div>
+        <div class="zone-map" style="height:320px">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span style="font-size:1rem">Interactive Zone Map</span>
+          <span style="font-size:.8rem;opacity:.7">GPS-enabled zone map would appear here in production</span>
+        </div>
+        <div class="grid grid-3" style="margin-top:1.5rem" id="zonesGrid"></div>
+      </div>
+
+      <div id="section-notifications" style="display:none">
+        <div class="dashboard-header">
+          <div><div class="dashboard-title">Notifications</div><div class="dashboard-sub">Recent alerts and updates</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="clearNotifs()"><i class="fa-solid fa-check-double"></i> Mark All Read</button>
+        </div>
+        <div id="notifsList"></div>
+      </div>
+
+      <div id="section-volunteers" style="display:none">
+        <div class="dashboard-header">
+          <div><div class="dashboard-title">Volunteer Team</div><div class="dashboard-sub">Active volunteers on the ground</div></div>
+        </div>
+        <div class="grid grid-auto" id="volTeamGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Volunteer Selector Modal -->
+<div class="modal-backdrop" id="volSelectorModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Select Volunteer Profile</h3>
+      <button class="modal-close" onclick="Modal.close('volSelectorModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:.5rem;max-height:400px;overflow-y:auto" id="volSelectorList"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/volunteer.js"></script>
+</body>
+</html>

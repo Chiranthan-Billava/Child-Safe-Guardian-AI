@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics – ChildSafe Alert</title>
+  <meta name="description" content="Analytics dashboard showing case statistics, trends, and reunification metrics.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Admin</span><span class="role-dot"></span></button>
+      <button class="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a><i class="fa-solid fa-chevron-right"></i><span>Analytics</span></div>
+    <h1><i class="fa-solid fa-chart-bar"></i> Analytics Dashboard</h1>
+    <p>Real-time statistics and trends for ChildSafe Alert operations.</p>
+  </div>
+</div>
+
+<div style="padding:2rem 1.25rem;max-width:var(--container);margin:0 auto">
+
+  <!-- KPI Cards -->
+  <div class="grid grid-4" style="margin-bottom:2rem">
+    <div class="stat-card" style="background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:white;border:none">
+      <div class="stat-icon" style="background:rgba(255,255,255,.15);color:white"><i class="fa-solid fa-folder-open"></i></div>
+      <div class="stat-info">
+        <div class="stat-value" style="color:white" id="kpi1">0</div>
+        <div class="stat-label" style="color:rgba(255,255,255,.8)">Total Cases</div>
+        <div class="stat-change up" style="color:#86efac"><i class="fa-solid fa-arrow-up"></i> All time</div>
+      </div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#166534,var(--success));color:white;border:none">
+      <div class="stat-icon" style="background:rgba(255,255,255,.15);color:white"><i class="fa-solid fa-heart"></i></div>
+      <div class="stat-info">
+        <div class="stat-value" style="color:white" id="kpi2">247</div>
+        <div class="stat-label" style="color:rgba(255,255,255,.8)">Total Reunited</div>
+        <div class="stat-change" style="color:#bbf7d0"><i class="fa-solid fa-percentage"></i> 96% success rate</div>
+      </div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#92400e,var(--accent));color:white;border:none">
+      <div class="stat-icon" style="background:rgba(255,255,255,.15);color:white"><i class="fa-solid fa-clock"></i></div>
+      <div class="stat-info">
+        <div class="stat-value" style="color:white">12 min</div>
+        <div class="stat-label" style="color:rgba(255,255,255,.8)">Avg. Reunification</div>
+        <div class="stat-change" style="color:#fed7aa"><i class="fa-solid fa-arrow-down"></i> Improved by 40%</div>
+      </div>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#0c4a6e,var(--info));color:white;border:none">
+      <div class="stat-icon" style="background:rgba(255,255,255,.15);color:white"><i class="fa-solid fa-users"></i></div>
+      <div class="stat-info">
+        <div class="stat-value" style="color:white" id="kpi4">0</div>
+        <div class="stat-label" style="color:rgba(255,255,255,.8)">Total Volunteers</div>
+        <div class="stat-change" style="color:#a5f3fc"><i class="fa-solid fa-arrow-up"></i> Growing network</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div class="grid grid-2" style="margin-bottom:1.5rem">
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div><div class="chart-title">Case Status Distribution</div><div class="chart-sub">Active vs Resolved cases</div></div>
+        <span class="badge badge-investigating">Live</span>
+      </div>
+      <div class="chart-container" style="height:280px"><canvas id="chartDonut"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div><div class="chart-title">Monthly Case Trends</div><div class="chart-sub">Cases reported over time</div></div>
+      </div>
+      <div class="chart-container" style="height:280px"><canvas id="chartLine"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="grid grid-2" style="margin-bottom:1.5rem">
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div><div class="chart-title">Cases by Event Type</div><div class="chart-sub">Which events see the most incidents</div></div>
+      </div>
+      <div class="chart-container" style="height:280px"><canvas id="chartBar"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div><div class="chart-title">Cases by Location / City</div><div class="chart-sub">Geographic distribution</div></div>
+      </div>
+      <div class="chart-container" style="height:280px"><canvas id="chartHBar"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Charts Row 3 -->
+  <div class="grid grid-2">
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div><div class="chart-title">Reunification Time Distribution</div><div class="chart-sub">How quickly children are found</div></div>
+      </div>
+      <div class="chart-container" style="height:240px"><canvas id="chartTime"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div><div class="chart-title">Sightings Per Case</div><div class="chart-sub">Average sightings before reunification</div></div>
+      </div>
+      <div class="chart-container" style="height:240px"><canvas id="chartSightings"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Summary Table -->
+  <div class="chart-card" style="margin-top:1.5rem">
+    <div class="chart-card-header">
+      <div><div class="chart-title">Case Summary by Event</div><div class="chart-sub">Breakdown of cases across events</div></div>
+    </div>
+    <div class="table-wrapper" style="border:none;border-radius:0">
+      <table class="table">
+        <thead><tr><th>Event</th><th>Venue</th><th>Total Cases</th><th>Resolved</th><th>Active</th><th>Success Rate</th></tr></thead>
+        <tbody id="eventSummaryTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:2rem">
+  <div class="footer-bottom" style="border-top:none;padding-top:1.5rem">
+    <span style="color:rgba(255,255,255,.5)">© 2026 ChildSafe Alert</span>
+    <div class="footer-bottom-links"><a href="index.html">Home</a><a href="admin.html">Admin</a></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/analytics.js"></script>
+</body>
+</html>

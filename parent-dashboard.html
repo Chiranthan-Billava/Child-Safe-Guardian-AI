@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Dashboard – ChildSafe Alert</title>
+  <meta name="description" content="Parent portal dashboard for monitoring children's safety, managing wristbands, and triggering emergency alerts.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Parent Portal</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="notif-btn" onclick="window.location.href='notifications.html'"><i class="fa-solid fa-bell"></i><span class="notif-badge" id="navNotifBadge">0</span></button>
+      <div class="parent-avatar" id="navAvatar" onclick="window.location.href='family-center.html'"></div>
+      <button class="btn btn-ghost btn-sm" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<!-- Welcome Header -->
+<div class="dash-welcome" style="margin-top:104px">
+  <div class="dash-welcome-inner">
+    <div>
+      <h1 id="welcomeTitle">Welcome back</h1>
+      <p id="welcomeSub">Your family safety overview</p>
+    </div>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <span class="live-indicator"><span class="live-dot"></span> ALL SYSTEMS ACTIVE</span>
+      <button class="btn btn-accent btn-sm" onclick="openAddChildModal()"><i class="fa-solid fa-child"></i> Add Child</button>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="dash-stats">
+  <div class="dash-stat-card">
+    <div class="dash-stat-icon" style="background:rgba(26,86,219,0.1);color:var(--primary)"><i class="fa-solid fa-children"></i></div>
+    <div class="dash-stat-info"><div class="dash-stat-value" id="statChildren">0</div><div class="dash-stat-label">Children Registered</div></div>
+  </div>
+  <div class="dash-stat-card">
+    <div class="dash-stat-icon" style="background:rgba(6,182,212,0.1);color:var(--info)"><i class="fa-solid fa-qrcode"></i></div>
+    <div class="dash-stat-info"><div class="dash-stat-value" id="statWristbands">0</div><div class="dash-stat-label">Active Wristbands</div></div>
+  </div>
+  <div class="dash-stat-card">
+    <div class="dash-stat-icon" style="background:rgba(239,68,68,0.1);color:var(--danger)"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="dash-stat-info"><div class="dash-stat-value" id="statAlerts">0</div><div class="dash-stat-label">Current Alerts</div></div>
+  </div>
+  <div class="dash-stat-card">
+    <div class="dash-stat-icon" style="background:rgba(34,197,94,0.1);color:var(--success)"><i class="fa-solid fa-shield-check"></i></div>
+    <div class="dash-stat-info"><div class="dash-stat-value" id="statSafeZones">0</div><div class="dash-stat-label">Safe Zones Active</div></div>
+  </div>
+  <div class="dash-stat-card">
+    <div class="dash-stat-icon" style="background:rgba(245,158,11,0.1);color:var(--warning)"><i class="fa-solid fa-bell"></i></div>
+    <div class="dash-stat-info"><div class="dash-stat-value" id="statNotifs">0</div><div class="dash-stat-label">Unread Notifications</div></div>
+  </div>
+  <div class="dash-stat-card">
+    <div class="dash-stat-icon" style="background:rgba(34,197,94,0.1);color:var(--success)"><i class="fa-solid fa-heart"></i></div>
+    <div class="dash-stat-info"><div class="dash-stat-value" id="statRecoveries">0</div><div class="dash-stat-label">Recoveries</div></div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="dash-section">
+  <h3 class="dash-section-title"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> Quick Actions</h3>
+  <div class="quick-actions-grid">
+    <button class="quick-action-card" onclick="openAddChildModal()">
+      <div class="qa-icon" style="background:rgba(26,86,219,0.1);color:var(--primary)"><i class="fa-solid fa-child-reaching"></i></div>
+      <div class="qa-label">Add Child</div>
+    </button>
+    <button class="quick-action-card" onclick="window.location.href='tracking-center.html'">
+      <div class="qa-icon" style="background:rgba(6,182,212,0.1);color:var(--info)"><i class="fa-solid fa-map-location-dot"></i></div>
+      <div class="qa-label">Track Child</div>
+    </button>
+    <button class="quick-action-card" onclick="window.location.href='wristband.html'">
+      <div class="qa-icon" style="background:rgba(124,58,237,0.1);color:#7c3aed"><i class="fa-solid fa-qrcode"></i></div>
+      <div class="qa-label">QR Wristband</div>
+    </button>
+    <button class="quick-action-card" onclick="openPanicModal()">
+      <div class="qa-icon" style="background:rgba(239,68,68,0.1);color:var(--danger)"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="qa-label">Emergency Alert</div>
+    </button>
+    <button class="quick-action-card" onclick="window.location.href='notifications.html'">
+      <div class="qa-icon" style="background:rgba(245,158,11,0.1);color:var(--warning)"><i class="fa-solid fa-bell"></i></div>
+      <div class="qa-label">Notifications</div>
+    </button>
+    <button class="quick-action-card" onclick="window.location.href='family-center.html'">
+      <div class="qa-icon" style="background:rgba(5,150,105,0.1);color:#059669"><i class="fa-solid fa-house-user"></i></div>
+      <div class="qa-label">Family Center</div>
+    </button>
+    <button class="quick-action-card" onclick="window.location.href='trusted-guardians.html'">
+      <div class="qa-icon" style="background:rgba(124,58,237,0.1);color:#7c3aed"><i class="fa-solid fa-user-shield"></i></div>
+      <div class="qa-label">Trusted Guardians</div>
+    </button>
+    <button class="quick-action-card" onclick="window.location.href='family-center.html#safety-scores'">
+      <div class="qa-icon" style="background:rgba(6,182,212,0.1);color:#06b6d4"><i class="fa-solid fa-brain"></i></div>
+      <div class="qa-label">Safety Score AI</div>
+    </button>
+  </div>
+</div>
+
+<!-- Children Cards -->
+<div class="dash-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+    <h3 class="dash-section-title" style="margin:0"><i class="fa-solid fa-children" style="color:var(--primary)"></i> My Children</h3>
+    <a href="family-center.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-arrow-right"></i> View All</a>
+  </div>
+  <div class="children-grid" id="childrenGrid">
+    <div class="empty-state" style="padding:3rem"><div class="empty-state-icon"><i class="fa-solid fa-child-reaching"></i></div><h3>No Children Added</h3><p>Add your first child to get started.</p><button class="btn btn-primary" onclick="openAddChildModal()"><i class="fa-solid fa-plus"></i> Add Child</button></div>
+  </div>
+</div>
+
+<!-- SOS Emergency Panel -->
+<div class="dash-section">
+  <h3 class="sos-section-title"><i class="fa-solid fa-circle-exclamation"></i> SOS Emergency Wristband</h3>
+  <p style="color:var(--text-3);font-size:.875rem;margin-bottom:1rem">Press the SOS button on a child's wristband to trigger an immediate emergency alert to all volunteers and guardians.</p>
+  <div class="sos-button-grid" id="sosButtonGrid"></div>
+</div>
+
+<!-- Active SOS Dashboard -->
+<div class="dash-section" id="activeSOSSection" style="display:none">
+  <h3 class="sos-section-title"><i class="fa-solid fa-siren-on"></i> Active SOS Emergencies</h3>
+  <div class="sos-active-grid" id="activeSOSGrid"></div>
+</div>
+
+<!-- Recent Notifications -->
+<div class="dash-section">
+  <h3 class="dash-section-title"><i class="fa-solid fa-bell" style="color:var(--warning)"></i> Recent Notifications</h3>
+  <div id="recentNotifications" class="dash-notif-list"></div>
+</div>
+
+<!-- Add Child Modal -->
+<div class="modal-backdrop" id="addChildModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-child-reaching" style="color:var(--primary);margin-right:.5rem"></i> Add Child</div>
+      <button class="modal-close" onclick="closeModal('addChildModal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="addChildForm" onsubmit="handleAddChild(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">Child's Name <span class="required">*</span></label><input type="text" class="form-input" id="acName" placeholder="e.g. Aryan" required></div>
+          <div class="form-group"><label class="form-label">Age <span class="required">*</span></label><input type="number" class="form-input" id="acAge" min="0" max="17" placeholder="e.g. 7" required></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">Gender <span class="required">*</span></label><select class="form-select" id="acGender" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+          <div class="form-group"><label class="form-label">Blood Group</label><select class="form-select" id="acBlood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+        </div>
+        <div class="form-group"><label class="form-label">School Name</label><input type="text" class="form-input" id="acSchool" placeholder="e.g. DPS Mysore"></div>
+        <div class="form-group"><label class="form-label">Allergies</label><input type="text" class="form-input" id="acAllergies" placeholder="e.g. Peanuts, None"></div>
+        <div class="form-group"><label class="form-label">Medical Conditions</label><textarea class="form-textarea" id="acMedical" placeholder="Any known medical conditions" style="min-height:60px"></textarea></div>
+        <div class="modal-footer" style="padding:0;border:none;margin-top:1rem">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('addChildModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Add Child</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Emergency Panic Modal -->
+<div class="modal-backdrop" id="panicModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-body" style="text-align:center;padding:2.5rem">
+      <div style="width:80px;height:80px;border-radius:50%;background:rgba(239,68,68,0.15);color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem;animation:pulse-ring 2s infinite"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h2 style="color:var(--danger);margin-bottom:.5rem">EMERGENCY CHILD ALERT</h2>
+      <p style="color:var(--text-3);margin-bottom:1.5rem">Select the child to trigger an emergency alert. This will activate all recovery systems immediately.</p>
+      <div id="panicChildList" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem"></div>
+      <button class="btn btn-ghost" onclick="closeModal('panicModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Panic Button -->
+<button class="panic-button-float" id="panicFloat" onclick="openPanicModal()" title="Emergency Alert">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>SOS</span>
+</button>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <span>&copy; 2026 ChildSafe Alert &middot; Parent Portal</span>
+    <div class="footer-bottom-links">
+      <a href="index.html">Home</a>
+      <a href="family-center.html">Family Center</a>
+      <a href="history.html">History</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/parent-dashboard.js"></script>
+</body>
+</html>

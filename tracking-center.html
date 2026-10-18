@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Tracking Center – ChildSafe Alert</title>
+  <meta name="description" content="Real-time child tracking, geofence monitoring, and emergency response command center.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="notif-btn"><i class="fa-solid fa-bell"></i><span class="notif-badge">3</span></button>
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Public</span><span class="role-dot"></span></button>
+      <a href="report.html" class="btn btn-accent btn-sm"><i class="fa-solid fa-circle-plus"></i> Report</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<!-- Page Header -->
+<div class="page-header" style="margin-top:36px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#0f3460 100%)">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <span>Live Tracking Center</span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h1><i class="fa-solid fa-map-location-dot" style="margin-right:.5rem"></i> Live Tracking Center</h1>
+        <p>Real-time child tracking, geofence monitoring, and emergency response.</p>
+      </div>
+      <div class="live-indicator"><span class="live-dot"></span> LIVE</div>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Row -->
+<div class="tracking-stats-row">
+  <div class="stat-card">
+    <div class="stat-icon red"><i class="fa-solid fa-satellite-dish"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statActiveSessions">3</div>
+      <div class="stat-label">Active Sessions</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statHighPriority">2</div>
+      <div class="stat-label">High Priority</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fa-solid fa-heart"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statRecovered">247</div>
+      <div class="stat-label">Recovered</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fa-solid fa-clock"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statAvgTime">12m</div>
+      <div class="stat-label">Avg Recovery</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div class="tracking-layout">
+  <!-- Map Area -->
+  <div class="tracking-map-area">
+    <!-- Breach Alert -->
+    <div class="breach-alert" id="breachAlert" style="display:none">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>⚠️ GEOFENCE BREACH DETECTED — <span id="breachChild">Child</span> has exited the safe zone!</span>
+    </div>
+
+    <!-- Case Selector -->
+    <div style="display:flex;align-items:center;gap:1rem">
+      <select class="form-select" id="caseSelector" style="max-width:300px"></select>
+      <span class="live-indicator" id="trackingStatus"><span class="live-dot"></span> TRACKING</span>
+    </div>
+
+    <!-- Map -->
+    <div class="map-container" id="trackingMap" style="height:450px">
+      <div class="map-grid"></div>
+      <!-- Geofence circle -->
+      <div class="geofence-circle safe" id="geofenceCircle" style="width:200px;height:200px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+      <!-- Search radius -->
+      <div class="search-radius" id="searchRadius" style="width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+      <!-- Guardian marker -->
+      <div class="map-marker guardian" id="guardianMarker" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+        <div class="map-marker-label">Guardian</div>
+      </div>
+      <!-- Last seen marker -->
+      <div class="map-marker last-seen" id="lastSeenMarker" style="top:40%;left:45%;transform:translate(-50%,-50%)">
+        <div class="map-marker-label">Last Seen</div>
+      </div>
+      <!-- Child marker -->
+      <div class="map-marker child" id="childMarker" style="top:35%;left:60%;transform:translate(-50%,-50%)">
+        <div class="map-marker-label" id="childMarkerLabel">Child</div>
+      </div>
+      <!-- Breadcrumb trail container -->
+      <div id="breadcrumbTrail"></div>
+      <!-- Map legend -->
+      <div style="position:absolute;bottom:1rem;left:1rem;background:rgba(0,0,0,0.8);border-radius:8px;padding:.75rem 1rem;display:flex;flex-direction:column;gap:.4rem;font-size:.7rem;color:rgba(255,255,255,0.8);z-index:20">
+        <div style="display:flex;align-items:center;gap:.5rem"><span style="width:10px;height:10px;border-radius:50%;background:var(--danger);display:inline-block"></span> Child Position</div>
+        <div style="display:flex;align-items:center;gap:.5rem"><span style="width:10px;height:10px;border-radius:50%;background:var(--success);display:inline-block"></span> Guardian Position</div>
+        <div style="display:flex;align-items:center;gap:.5rem"><span style="width:10px;height:10px;border-radius:50%;background:var(--warning);display:inline-block"></span> Last Seen</div>
+        <div style="display:flex;align-items:center;gap:.5rem"><span style="width:10px;height:10px;border:2px dashed rgba(34,197,94,0.5);border-radius:50%;display:inline-block"></span> Safe Zone</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="tracking-sidebar-area">
+    <!-- Tracking Status -->
+    <div class="tracking-panel">
+      <div class="tracking-panel-header">
+        <h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-info-circle" style="color:var(--primary);margin-right:.375rem"></i> Tracking Status</h4>
+        <span class="geofence-badge safe" id="geoStatusBadge"><span class="status-dot found"></span> SAFE</span>
+      </div>
+      <div class="tracking-panel-body">
+        <div class="tracking-info-row">
+          <span class="tracking-info-label">Child</span>
+          <span class="tracking-info-value" id="infoChild">—</span>
+        </div>
+        <div class="tracking-info-row">
+          <span class="tracking-info-label">Direction</span>
+          <span class="tracking-info-value" id="infoDirection">N/E ↗</span>
+        </div>
+        <div class="tracking-info-row">
+          <span class="tracking-info-label">Distance</span>
+          <span class="tracking-info-value" id="infoDistance">45m</span>
+        </div>
+        <div class="tracking-info-row">
+          <span class="tracking-info-label">Safe Radius</span>
+          <span class="tracking-info-value" id="infoRadius">100m</span>
+        </div>
+        <div class="tracking-info-row">
+          <span class="tracking-info-label">Last Update</span>
+          <span class="tracking-info-value" id="infoLastUpdate">—</span>
+        </div>
+        <div class="tracking-info-row">
+          <span class="tracking-info-label">Priority</span>
+          <span class="tracking-info-value" id="infoPriority"><span class="badge badge-active">HIGH</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Safety Score -->
+    <div class="card" id="safetyScoreCard" style="display:none">
+      <div class="card-header">
+        <h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-brain" style="color:#06b6d4;margin-right:.375rem"></i> Safety Score AI</h4>
+        <span class="badge" id="safetyScoreLabel" style="font-size:.6rem">—</span>
+      </div>
+      <div class="card-body" style="display:flex;align-items:center;gap:1rem;padding:1rem">
+        <div class="safety-score-ring safety-score-ring-sm" id="trackingSafetyRing"></div>
+        <div id="safetyScoreFactors" style="flex:1;font-size:.75rem;color:var(--text-3)"></div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <div class="card-header">
+        <h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-bolt" style="color:var(--accent);margin-right:.375rem"></i> Quick Actions</h4>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:.5rem">
+        <a href="ai-search-commander.html" class="btn btn-primary btn-sm" style="width:100%"><i class="fa-solid fa-brain"></i> AI Search Commander</a>
+        <a href="notifications.html" class="btn btn-accent btn-sm" style="width:100%"><i class="fa-solid fa-bell"></i> Notification Center</a>
+        <button class="btn btn-danger btn-sm" style="width:100%" onclick="triggerEmergency()"><i class="fa-solid fa-triangle-exclamation"></i> Emergency Broadcast</button>
+      </div>
+    </div>
+
+    <!-- Active Wristbands -->
+    <div class="card">
+      <div class="card-header">
+        <h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-qrcode" style="color:var(--info);margin-right:.375rem"></i> Active Wristbands</h4>
+      </div>
+      <div class="card-body" style="padding:.75rem">
+        <div id="activeWristbandsList" style="display:flex;flex-direction:column;gap:.5rem"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <span>&copy; 2026 ChildSafe Alert &middot; Live Tracking Center</span>
+    <div class="footer-bottom-links">
+      <a href="index.html">Home</a>
+      <a href="ai-search-commander.html">AI Commander</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/tracking-center.js"></script>
+</body>
+</html>

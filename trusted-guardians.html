@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trusted Guardian Network – ChildSafe Alert</title>
+  <meta name="description" content="Manage trusted guardians authorized for child recovery. Verify identities, issue QR passes, and control secure pickup authorization.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<div class="emergency-banner"><i class="fa-solid fa-triangle-exclamation"></i><span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span><i class="fa-solid fa-triangle-exclamation"></i></div>
+
+<nav class="navbar" style="top:36px"><div class="navbar-inner"><a href="index.html" class="navbar-brand"><div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div><div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Guardian Network</span></div></a><nav class="navbar-nav" id="mainNav"></nav><div class="navbar-actions"><div class="parent-avatar" id="navAvatar" onclick="window.location.href='parent-dashboard.html'"></div><button class="btn btn-ghost btn-sm" onclick="CSA.logoutParent();window.location.href='login.html'"><i class="fa-solid fa-right-from-bracket"></i></button><button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button></div></div></nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<!-- Page Header -->
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="parent-dashboard.html">Dashboard</a><i class="fa-solid fa-chevron-right"></i><span>Trusted Guardians</span></div>
+    <h1><i class="fa-solid fa-user-shield" style="margin-right:.5rem"></i> Trusted Guardian Network</h1>
+    <p>Manage authorized adults who can assist during emergencies and verify child recovery.</p>
+  </div>
+</div>
+
+<!-- Analytics Bar -->
+<div class="guardian-analytics-bar" id="analyticsBar"></div>
+
+<!-- Toolbar -->
+<div class="guardian-toolbar">
+  <div class="guardian-toolbar-inner">
+    <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+      <select class="form-select" id="childFilter" onchange="renderPage()" style="max-width:240px"><option value="all">All Children</option></select>
+      <select class="form-select" id="statusFilter" onchange="renderPage()" style="max-width:180px">
+        <option value="all">All Status</option>
+        <option value="verified">✅ Verified</option>
+        <option value="pending">⏳ Pending</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openAddGuardianModal()"><i class="fa-solid fa-user-plus"></i> Add Guardian</button>
+  </div>
+</div>
+
+<!-- Guardian Cards Grid -->
+<div class="tg-section">
+  <div class="guardian-cards-grid" id="guardianGrid"></div>
+</div>
+
+<!-- Nearest Guardian Locator -->
+<div class="tg-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+    <h3 class="dash-section-title" style="margin:0"><i class="fa-solid fa-location-crosshairs" style="color:var(--info)"></i> Nearest Trusted Guardians</h3>
+    <select class="form-select" id="nearestChildSelect" onchange="renderNearestGuardians()" style="max-width:220px"></select>
+  </div>
+  <div class="nearest-guardians-list" id="nearestGuardiansList"></div>
+</div>
+
+<!-- Recovery Authorization Panel -->
+<div class="tg-section">
+  <h3 class="dash-section-title"><i class="fa-solid fa-shield-check" style="color:var(--success)"></i> Recovery Authorization</h3>
+  <p style="color:var(--text-3);font-size:.875rem;margin-bottom:1.25rem">When a child is located, only these authorized guardians can verify recovery and collect the child.</p>
+  <div id="recoveryAuthPanel"></div>
+</div>
+
+<!-- Pickup History -->
+<div class="tg-section">
+  <h3 class="dash-section-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--accent)"></i> Pickup Verification History</h3>
+  <div id="pickupHistory"></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--        ADD GUARDIAN MODAL              -->
+<!-- ═══════════════════════════════════════ -->
+<div class="modal-backdrop" id="addGuardianModal">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-user-plus" style="color:var(--primary);margin-right:.5rem"></i> Add Trusted Guardian</div>
+      <button class="modal-close" onclick="closeModal('addGuardianModal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="addGuardianForm" onsubmit="handleAddGuardian(event)">
+        <!-- Personal Info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">Full Name <span class="required">*</span></label><input type="text" class="form-input" id="agName" placeholder="e.g. Ravi Sharma" required></div>
+          <div class="form-group"><label class="form-label">Relationship <span class="required">*</span></label>
+            <select class="form-select" id="agRelation" required>
+              <option value="">Select...</option>
+              <option>Mother</option><option>Father</option><option>Grandparent</option>
+              <option>Uncle</option><option>Aunt</option><option>Teacher</option>
+              <option>School Coordinator</option><option>Family Friend</option><option>Caretaker</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">Mobile <span class="required">*</span></label><div class="auth-input-group"><i class="fa-solid fa-phone"></i><input type="tel" class="form-input" id="agMobile" placeholder="+91-XXXXXXXXXX" required></div></div>
+          <div class="form-group"><label class="form-label">Email</label><div class="auth-input-group"><i class="fa-solid fa-envelope"></i><input type="email" class="form-input" id="agEmail" placeholder="email@example.com"></div></div>
+        </div>
+        <div class="form-group"><label class="form-label">Address</label><input type="text" class="form-input" id="agAddress" placeholder="Full address"></div>
+        <!-- Identification -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">ID Type</label>
+            <select class="form-select" id="agIdType">
+              <option value="">Select...</option>
+              <option>Aadhaar</option><option>Voter ID</option><option>Driving License</option>
+              <option>PAN Card</option><option>Passport</option><option>School ID</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">ID Number</label><input type="text" class="form-input" id="agIdNum" placeholder="e.g. XXXX-XXXX-1234"></div>
+        </div>
+        <!-- Child Assignment & Priority -->
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:1rem">
+          <div class="form-group"><label class="form-label">Assign to Children <span class="required">*</span></label>
+            <div id="agChildCheckboxes" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Priority Level</label>
+            <select class="form-select" id="agPriority">
+              <option value="primary">🟢 Primary</option>
+              <option value="secondary" selected>🟡 Secondary</option>
+              <option value="tertiary">🔵 Tertiary</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:0;border:none;margin-top:1.5rem">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('addGuardianModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-user-shield"></i> Add Guardian</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--        GUARDIAN DETAIL MODAL           -->
+<!-- ═══════════════════════════════════════ -->
+<div class="modal-backdrop" id="guardianDetailModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-id-card" style="color:var(--primary);margin-right:.5rem"></i> Guardian Pass</div>
+      <button class="modal-close" onclick="closeModal('guardianDetailModal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="guardianDetailContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!--     SAFE PICKUP VERIFICATION MODAL     -->
+<!-- ═══════════════════════════════════════ -->
+<div class="modal-backdrop" id="pickupModal">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-hand-holding-heart" style="color:var(--success);margin-right:.5rem"></i> Safe Pickup Verification</div>
+      <button class="modal-close" onclick="closeModal('pickupModal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="pickupModalContent"></div>
+  </div>
+</div>
+
+<footer class="footer"><div class="footer-bottom"><span>&copy; 2026 ChildSafe Alert &middot; Guardian Network</span><div class="footer-bottom-links"><a href="parent-dashboard.html">Dashboard</a><a href="family-center.html">Family Center</a></div></div></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/trusted-guardians.js"></script>
+</body>
+</html>

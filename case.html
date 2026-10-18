@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Details – ChildSafe Alert</title>
+  <meta name="description" content="View missing child case details, timeline, QR code, and report sightings.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Public</span><span class="role-dot"></span></button>
+      <a href="report.html" class="btn btn-accent btn-sm"><i class="fa-solid fa-circle-plus"></i> Report</a>
+      <button class="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><i class="fa-solid fa-chevron-right"></i>
+      <a href="alerts.html">Alerts</a><i class="fa-solid fa-chevron-right"></i>
+      <span id="breadcrumbId">Case Details</span>
+    </div>
+    <h1 id="pageTitle">Case Details</h1>
+    <p id="pageSubtitle">View full case information and report a sighting.</p>
+  </div>
+</div>
+
+<div style="margin-top:0;background:var(--bg)">
+  <!-- Not Found -->
+  <div id="notFound" style="display:none;max-width:500px;margin:4rem auto;text-align:center;padding:2rem">
+    <div style="font-size:4rem;margin-bottom:1rem">🔍</div>
+    <h2>Case Not Found</h2>
+    <p style="margin-bottom:1.5rem;color:var(--text-3)">The case ID in the URL doesn't match any record. Please check the link and try again.</p>
+    <a href="alerts.html" class="btn btn-primary"><i class="fa-solid fa-list"></i> View All Alerts</a>
+  </div>
+
+  <!-- Case Detail Layout -->
+  <div class="case-detail-layout" id="caseDetail" style="display:none">
+    <!-- Main -->
+    <div class="case-detail-main">
+
+      <!-- Action Bar -->
+      <div class="card" style="margin-bottom:1.5rem">
+        <div class="card-body" style="padding:1.25rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.75rem;color:var(--text-3);font-weight:600">Case Status</div>
+            <div id="statusBadge"></div>
+          </div>
+          <a id="btnSighting" href="#" class="btn btn-accent"><i class="fa-solid fa-location-arrow"></i> Report Sighting</a>
+          <button class="btn btn-primary" id="btnShare" onclick=""><i class="fa-solid fa-share-nodes"></i> Share Alert</button>
+          <button class="btn btn-outline" id="btnDownloadQR"><i class="fa-solid fa-download"></i> Download QR</button>
+        </div>
+      </div>
+
+      <!-- Child Profile -->
+      <div class="child-profile-card" style="margin-bottom:1.5rem">
+        <div class="child-profile-photo" id="profilePhoto">
+          <div class="photo-placeholder-lg">
+            <i class="fa-solid fa-child"></i>
+            <span>No Photo Available</span>
+          </div>
+          <div class="profile-status-overlay" id="profileStatusBadge"></div>
+        </div>
+        <div class="child-profile-body">
+          <div class="profile-case-id" id="profileCaseId">—</div>
+          <div class="profile-name" id="profileName">—</div>
+          <div class="profile-info-grid">
+            <div class="profile-info-item">
+              <div class="profile-info-label">Age</div>
+              <div class="profile-info-value" id="profileAge">—</div>
+            </div>
+            <div class="profile-info-item">
+              <div class="profile-info-label">Gender</div>
+              <div class="profile-info-value" id="profileGender">—</div>
+            </div>
+            <div class="profile-info-item">
+              <div class="profile-info-label">Last Seen</div>
+              <div class="profile-info-value" id="profileTime">—</div>
+            </div>
+            <div class="profile-info-item">
+              <div class="profile-info-label">Reported By</div>
+              <div class="profile-info-value" id="profileParent">—</div>
+            </div>
+          </div>
+          <div class="profile-info-label" style="margin-bottom:.5rem">Last Seen Location</div>
+          <div style="display:flex;align-items:center;gap:.5rem;font-size:.9375rem;font-weight:600;color:var(--text);margin-bottom:1rem">
+            <i class="fa-solid fa-location-dot" style="color:var(--accent)"></i>
+            <span id="profileLocation">—</span>
+          </div>
+          <div class="profile-info-label" style="margin-bottom:.5rem">Clothing Description</div>
+          <div class="clothing-desc" id="profileClothing">—</div>
+          <div id="profileNotes" style="margin-top:.875rem"></div>
+        </div>
+      </div>
+
+      <!-- Sightings Timeline -->
+      <div class="card">
+        <div class="card-header">
+          <h3 style="font-size:1rem"><i class="fa-solid fa-timeline" style="color:var(--primary)"></i> Case Timeline & Sightings</h3>
+          <span class="badge badge-investigating" id="sightingsCount">0 sightings</span>
+        </div>
+        <div class="card-body">
+          <div class="timeline" id="caseTimeline"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="case-detail-sidebar">
+
+      <!-- QR Code -->
+      <div class="qr-block">
+        <div class="qr-label"><i class="fa-solid fa-qrcode"></i> Scan to Report Sighting</div>
+        <div class="qr-container"><div id="caseQR"></div></div>
+        <p style="font-size:.8rem;color:var(--text-3)">Share QR code publicly to crowdsource sightings</p>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="downloadQR('caseQR','childsafe-'+caseId)">
+          <i class="fa-solid fa-download"></i> Download QR Code
+        </button>
+      </div>
+
+      <!-- Contact Card -->
+      <div class="card">
+        <div class="card-header"><h3 style="font-size:1rem"><i class="fa-solid fa-phone" style="color:var(--primary)"></i> Emergency Contact</h3></div>
+        <div class="card-body">
+          <div style="margin-bottom:.875rem">
+            <div class="profile-info-label" style="margin-bottom:.25rem">Parent / Guardian</div>
+            <div style="font-weight:700;font-size:1rem" id="contactName">—</div>
+          </div>
+          <a id="contactPhone" href="#" class="btn btn-primary" style="width:100%;margin-bottom:.5rem">
+            <i class="fa-solid fa-phone"></i> Call Now
+          </a>
+          <a id="sightingBtn2" href="#" class="btn btn-accent" style="width:100%">
+            <i class="fa-solid fa-location-arrow"></i> I Saw This Child
+          </a>
+        </div>
+      </div>
+
+      <!-- Admin Actions (role-based) -->
+      <div class="card" id="adminCard" data-role="admin,volunteer" style="display:none">
+        <div class="card-header"><h3 style="font-size:1rem"><i class="fa-solid fa-gear" style="color:var(--primary)"></i> Case Actions</h3></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:.5rem">
+          <div class="form-group">
+            <label class="form-label">Update Status</label>
+            <select class="form-select" id="statusUpdate">
+              <option value="active">Active</option>
+              <option value="searching">Searching</option>
+              <option value="investigating">Investigating</option>
+              <option value="found">Found ✓</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="updateStatus()"><i class="fa-solid fa-save"></i> Update Status</button>
+          <button class="btn btn-ghost btn-sm" onclick="sendMockNotification('broadcast',{})"><i class="fa-solid fa-bullhorn"></i> Broadcast Alert</button>
+        </div>
+      </div>
+
+      <!-- Event Info -->
+      <div class="card" id="eventCard">
+        <div class="card-header"><h3 style="font-size:1rem"><i class="fa-solid fa-calendar" style="color:var(--primary)"></i> Event Information</h3></div>
+        <div class="card-body" id="eventInfo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:2rem">
+  <div class="footer-bottom" style="border-top:none;padding-top:1.5rem">
+    <span style="color:rgba(255,255,255,.5)">© 2026 ChildSafe Alert</span>
+    <div class="footer-bottom-links"><a href="index.html">Home</a><a href="alerts.html">All Alerts</a></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/case.js"></script>
+</body>
+</html>

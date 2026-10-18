@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Center – ChildSafe Alert</title>
+  <meta name="description" content="Real-time notifications and recovery timeline for the ChildSafe Alert platform.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="notif-btn"><i class="fa-solid fa-bell"></i><span class="notif-badge">3</span></button>
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Public</span><span class="role-dot"></span></button>
+      <a href="report.html" class="btn btn-accent btn-sm"><i class="fa-solid fa-circle-plus"></i> Report</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<!-- Page Header -->
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <span>Notification Center</span>
+    </div>
+    <h1><i class="fa-solid fa-bell" style="margin-right:.5rem"></i> Notification Center</h1>
+    <p>Real-time alerts, updates, and recovery timeline for all active cases.</p>
+  </div>
+</div>
+
+<!-- Stats Row -->
+<div class="tracking-stats-row">
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fa-solid fa-bell"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statTotalNotifs">0</div>
+      <div class="stat-label">Total Notifications</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon red"><i class="fa-solid fa-location-crosshairs"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statGeoAlerts">0</div>
+      <div class="stat-label">GeoFence Alerts</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange"><i class="fa-solid fa-eye"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statSightings">0</div>
+      <div class="stat-label">Sighting Reports</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fa-solid fa-heart"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" id="statRecoveries">0</div>
+      <div class="stat-label">Recoveries</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div class="notifications-container">
+  <div class="notifications-layout">
+    <!-- Notifications List -->
+    <div>
+      <!-- Filter Tabs -->
+      <div class="tabs" id="notifTabs">
+        <button class="tab-btn active" data-filter="all"><i class="fa-solid fa-bell"></i> All</button>
+        <button class="tab-btn" data-filter="geofence"><i class="fa-solid fa-location-crosshairs"></i> GeoFence</button>
+        <button class="tab-btn" data-filter="sighting"><i class="fa-solid fa-eye"></i> Sightings</button>
+        <button class="tab-btn" data-filter="qr-scan"><i class="fa-solid fa-qrcode"></i> QR Scans</button>
+        <button class="tab-btn" data-filter="commander"><i class="fa-solid fa-brain"></i> Commander</button>
+        <button class="tab-btn" data-filter="recovery"><i class="fa-solid fa-heart"></i> Recovery</button>
+      </div>
+
+      <div class="notifications-list" id="notificationsList"></div>
+
+      <div style="text-align:center;margin-top:1.5rem">
+        <div class="live-indicator" style="display:inline-flex"><span class="live-dot"></span> Auto-updating every 15 seconds</div>
+      </div>
+    </div>
+
+    <!-- Sidebar: Recovery Timeline -->
+    <div class="notifications-sidebar">
+      <!-- Timeline Selector -->
+      <div class="card">
+        <div class="card-header">
+          <h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-timeline" style="color:var(--primary);margin-right:.375rem"></i> Recovery Timeline</h4>
+          <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
+        </div>
+        <div class="card-body">
+          <select class="form-select" id="timelineSelect" style="margin-bottom:1rem"></select>
+
+          <!-- View Tabs -->
+          <div class="timeline-view-tabs">
+            <button class="timeline-tab active" data-view="timeline">Timeline</button>
+            <button class="timeline-tab" data-view="log">Command Log</button>
+            <button class="timeline-tab" data-view="analytics">Analytics</button>
+          </div>
+
+          <!-- Timeline View -->
+          <div id="timelineView">
+            <div class="recovery-timeline" id="recoveryTimeline"></div>
+          </div>
+
+          <!-- Command Log View -->
+          <div id="logView" style="display:none">
+            <div class="table-wrapper" style="border:none">
+              <table class="table" style="font-size:.75rem">
+                <thead>
+                  <tr><th>Time</th><th>Event</th><th>Source</th></tr>
+                </thead>
+                <tbody id="logTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Analytics View -->
+          <div id="analyticsView" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem" id="analyticsCards"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification Types Legend -->
+      <div class="card">
+        <div class="card-header">
+          <h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-info-circle" style="color:var(--info);margin-right:.375rem"></i> Notification Channels</h4>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.8125rem">
+            <span class="channel-badge sms">SMS</span>
+            <span style="color:var(--text-3)">Text message to guardian phone</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.8125rem">
+            <span class="channel-badge push">PUSH</span>
+            <span style="color:var(--text-3)">Mobile push notification</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.8125rem">
+            <span class="channel-badge email">EMAIL</span>
+            <span style="color:var(--text-3)">Detailed email update</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.8125rem">
+            <span class="channel-badge in-app">IN-APP</span>
+            <span style="color:var(--text-3)">In-application alert</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="navbar-brand" style="margin-bottom:.5rem">
+        <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+        <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+      </div>
+      <p class="footer-desc">AI-powered Child Safety, Tracking, Recovery, and Reunification Platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="wristband.html">Smart Wristband</a></li>
+        <li><a href="tracking-center.html">Tracking Center</a></li>
+        <li><a href="ai-search-commander.html">AI Commander</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Emergency</h4>
+      <ul>
+        <li><a href="tel:1098">Childline: 1098</a></li>
+        <li><a href="tel:100">Police: 100</a></li>
+        <li><a href="tel:112">Emergency: 112</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 ChildSafe Alert &middot; CSE Design Thinking Project</span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/notifications.js"></script>
+</body>
+</html>

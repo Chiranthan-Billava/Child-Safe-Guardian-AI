@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Recovery Scan – ChildSafe Alert</title>
+  <meta name="description" content="Emergency child identification from QR wristband scan.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<div class="emergency-banner">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+</div>
+
+<nav class="navbar" style="top:36px">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div>
+      <div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">Reunification System</span></div>
+    </a>
+    <nav class="navbar-nav" id="mainNav"></nav>
+    <div class="navbar-actions">
+      <button class="notif-btn"><i class="fa-solid fa-bell"></i><span class="notif-badge">3</span></button>
+      <button class="role-selector" id="roleSelector"><i class="fa-solid fa-user-circle"></i><span class="role-selector-text">Public</span><span class="role-dot"></span></button>
+      <a href="report.html" class="btn btn-accent btn-sm"><i class="fa-solid fa-circle-plus"></i> Report</a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<div class="page-wrapper" style="padding-top:104px">
+  <div class="scan-container">
+    <!-- Emergency Header -->
+    <div class="scan-hero">
+      <div class="scan-hero-inner">
+        <div style="font-size:2.5rem;margin-bottom:.75rem">🔍</div>
+        <h2 style="color:white;font-size:1.5rem;margin-bottom:.5rem"><i class="fa-solid fa-qrcode"></i> QR Recovery Scan Result</h2>
+        <p style="color:rgba(255,255,255,0.8);font-size:.9rem;margin:0">Wristband scanned successfully. Child information below.</p>
+        <div class="live-indicator" style="margin-top:1rem;display:inline-flex;background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:white">
+          <span class="live-dot" style="background:white"></span> EMERGENCY RESPONSE ACTIVE
+        </div>
+      </div>
+    </div>
+
+    <!-- Child Card -->
+    <div class="scan-child-card" id="scanCard">
+      <div class="scan-child-header">
+        <div class="scan-child-photo" id="scanPhoto">👶</div>
+        <div class="scan-child-info">
+          <div class="scan-child-name" id="scanName">Loading...</div>
+          <div class="scan-child-meta" id="scanMeta">—</div>
+          <div style="margin-top:.5rem">
+            <span class="badge badge-active" id="scanStatus"><span class="status-dot active"></span> MISSING</span>
+            <span class="geofence-badge breach" id="scanGeofence" style="margin-left:.5rem"><i class="fa-solid fa-location-crosshairs"></i> BREACH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scan-details-grid">
+        <div class="scan-detail-item">
+          <div class="scan-detail-label"><i class="fa-solid fa-user-shield"></i> Guardian Name</div>
+          <div class="scan-detail-value" id="scanGuardian">—</div>
+        </div>
+        <div class="scan-detail-item">
+          <div class="scan-detail-label"><i class="fa-solid fa-phone"></i> Guardian Phone</div>
+          <div class="scan-detail-value" id="scanPhone">—</div>
+        </div>
+        <div class="scan-detail-item">
+          <div class="scan-detail-label"><i class="fa-solid fa-calendar"></i> Event</div>
+          <div class="scan-detail-value" id="scanEvent">—</div>
+        </div>
+        <div class="scan-detail-item">
+          <div class="scan-detail-label"><i class="fa-solid fa-map-pin"></i> Wristband ID</div>
+          <div class="scan-detail-value" id="scanWbId">—</div>
+        </div>
+        <div class="scan-detail-item">
+          <div class="scan-detail-label"><i class="fa-solid fa-phone-volume"></i> Emergency Contact</div>
+          <div class="scan-detail-value" id="scanEmergency">—</div>
+        </div>
+        <div class="scan-detail-item">
+          <div class="scan-detail-label"><i class="fa-solid fa-droplet"></i> Blood Group</div>
+          <div class="scan-detail-value" id="scanBlood">—</div>
+        </div>
+        <div class="scan-detail-item" style="grid-column:1/-1">
+          <div class="scan-detail-label"><i class="fa-solid fa-heart-pulse"></i> Medical Notes</div>
+          <div class="scan-detail-value" id="scanMedical">—</div>
+        </div>
+        <div class="scan-detail-item" style="grid-column:1/-1">
+          <div class="scan-detail-label"><i class="fa-solid fa-triangle-exclamation"></i> Allergies</div>
+          <div class="scan-detail-value" id="scanAllergies">—</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="scan-actions">
+        <button class="scan-action-btn call" id="btnCall" onclick="callGuardian()">
+          <i class="fa-solid fa-phone"></i> Call Guardian
+        </button>
+        <button class="scan-action-btn notify" onclick="notifyCommandCenter()">
+          <i class="fa-solid fa-satellite-dish"></i> Notify Command Center
+        </button>
+        <button class="scan-action-btn found" onclick="markChildFound()">
+          <i class="fa-solid fa-check-circle"></i> Mark Child Found
+        </button>
+        <a href="tracking-center.html" class="scan-action-btn route">
+          <i class="fa-solid fa-route"></i> View Recovery Route
+        </a>
+      </div>
+    </div>
+
+    <!-- Recovery Timeline -->
+    <div class="card" style="margin-top:1.5rem">
+      <div class="card-header">
+        <h4><i class="fa-solid fa-timeline" style="color:var(--primary);margin-right:.5rem"></i> Recovery Timeline</h4>
+        <span class="live-indicator"><span class="live-dot"></span> LIVE</span>
+      </div>
+      <div class="card-body">
+        <div class="recovery-timeline" id="recoveryTimeline"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <span>&copy; 2026 ChildSafe Alert &middot; Emergency Response Interface</span>
+    <div class="footer-bottom-links">
+      <a href="index.html">Back to Home</a>
+      <a href="tracking-center.html">Tracking Center</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/scan-result.js"></script>
+</body>
+</html>

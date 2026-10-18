@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account – ChildSafe Alert</title>
+  <meta name="description" content="Register as a parent on ChildSafe Alert to protect your children at crowded events.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="auth-body">
+
+<div class="auth-layout">
+  <!-- Left: Branding -->
+  <div class="auth-brand-panel">
+    <div class="auth-brand-inner">
+      <a href="index.html" class="navbar-brand" style="margin-bottom:2rem">
+        <div class="brand-icon" style="width:48px;height:48px;font-size:1.25rem"><i class="fa-solid fa-shield-heart"></i></div>
+        <div class="brand-text"><span class="brand-name" style="color:white;font-size:1.25rem">ChildSafe Alert</span><span class="brand-tagline" style="color:rgba(255,255,255,0.7)">Parent Safety Portal</span></div>
+      </a>
+      <h2 style="color:white;font-size:1.75rem;margin-bottom:1rem;line-height:1.3">Join Thousands of<br>Safety-Conscious Parents</h2>
+      <p style="color:rgba(255,255,255,0.7);font-size:.9375rem;line-height:1.7;margin-bottom:2rem">Create your free account in minutes. Add your children, set up safe zones, and get instant alerts when your child needs you.</p>
+      <div class="auth-features">
+        <div class="auth-feature-item"><i class="fa-solid fa-child"></i> Multi-Child Support</div>
+        <div class="auth-feature-item"><i class="fa-solid fa-map-location-dot"></i> Custom Safe Zones</div>
+        <div class="auth-feature-item"><i class="fa-solid fa-history"></i> Complete History</div>
+        <div class="auth-feature-item"><i class="fa-solid fa-family"></i> Family Dashboard</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Signup Form -->
+  <div class="auth-form-panel">
+    <div class="auth-form-container">
+      <!-- Step Indicator -->
+      <div class="auth-steps">
+        <div class="auth-step active" id="as1"><span class="auth-step-num">1</span><span class="auth-step-label">Account</span></div>
+        <div class="auth-step" id="as2"><span class="auth-step-num">2</span><span class="auth-step-label">Details</span></div>
+        <div class="auth-step" id="as3"><span class="auth-step-num">3</span><span class="auth-step-label">Verify</span></div>
+      </div>
+
+      <!-- Step 1: Account Info -->
+      <div id="signupStep1">
+        <div class="auth-form-header">
+          <h1>Create Account</h1>
+          <p>Step 1: Your account information</p>
+        </div>
+        <form id="signupForm1" onsubmit="goSignupStep(2, event)">
+          <div class="form-group">
+            <label class="form-label">Full Name <span class="required">*</span></label>
+            <div class="auth-input-group"><i class="fa-solid fa-user"></i>
+              <input type="text" class="form-input" id="signupName" placeholder="e.g. Rohit Sharma" required>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group">
+              <label class="form-label">Mobile <span class="required">*</span></label>
+              <div class="auth-input-group"><i class="fa-solid fa-phone"></i>
+                <input type="tel" class="form-input" id="signupMobile" placeholder="+91-9845012345" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email <span class="required">*</span></label>
+              <div class="auth-input-group"><i class="fa-solid fa-envelope"></i>
+                <input type="email" class="form-input" id="signupEmail" placeholder="you@email.com" required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password <span class="required">*</span></label>
+            <div class="auth-input-group"><i class="fa-solid fa-lock"></i>
+              <input type="password" class="form-input" id="signupPassword" placeholder="Min 8 characters" required oninput="updateStrength()">
+              <button type="button" class="auth-toggle-pw" onclick="togglePasswordVisibility('signupPassword', this)"><i class="fa-solid fa-eye"></i></button>
+            </div>
+            <div class="password-strength" id="pwStrength"><div class="password-strength-bar" id="pwBar"></div></div>
+            <div class="password-strength-label" id="pwLabel"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Password <span class="required">*</span></label>
+            <div class="auth-input-group"><i class="fa-solid fa-lock"></i>
+              <input type="password" class="form-input" id="signupConfirm" placeholder="Re-enter password" required>
+            </div>
+          </div>
+          <div id="signupError1" class="auth-error" style="display:none"></div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%"><i class="fa-solid fa-arrow-right"></i> Next: Emergency Details</button>
+        </form>
+      </div>
+
+      <!-- Step 2: Emergency Details -->
+      <div id="signupStep2" style="display:none">
+        <div class="auth-form-header">
+          <h1>Emergency Details</h1>
+          <p>Step 2: Address & emergency contact</p>
+        </div>
+        <form id="signupForm2" onsubmit="goSignupStep(3, event)">
+          <div class="form-group">
+            <label class="form-label">Home Address</label>
+            <div class="auth-input-group"><i class="fa-solid fa-location-dot"></i>
+              <input type="text" class="form-input" id="signupAddress" placeholder="Full address">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Emergency Contact Name</label>
+            <div class="auth-input-group"><i class="fa-solid fa-user-shield"></i>
+              <input type="text" class="form-input" id="signupEmergName" placeholder="e.g. Spouse, Relative">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group">
+              <label class="form-label">Emergency Phone</label>
+              <div class="auth-input-group"><i class="fa-solid fa-phone"></i>
+                <input type="tel" class="form-input" id="signupEmergPhone" placeholder="+91-XXXXXXXXXX">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Relation</label>
+              <select class="form-select" id="signupEmergRelation">
+                <option value="Spouse">Spouse</option>
+                <option value="Parent">Parent</option>
+                <option value="Sibling">Sibling</option>
+                <option value="Relative">Relative</option>
+                <option value="Friend">Friend</option>
+              </select>
+            </div>
+          </div>
+          <div id="signupError2" class="auth-error" style="display:none"></div>
+          <div style="display:flex;gap:.75rem">
+            <button type="button" class="btn btn-ghost" onclick="goSignupStep(1)" style="flex:1"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <button type="submit" class="btn btn-primary btn-lg" style="flex:2"><i class="fa-solid fa-shield-check"></i> Next: Verify</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 3: OTP Verification -->
+      <div id="signupStep3" style="display:none">
+        <div class="auth-form-header" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(26,86,219,0.1);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1rem"><i class="fa-solid fa-mobile-screen"></i></div>
+          <h1>Verify Your Account</h1>
+          <p>Enter the 6-digit OTP sent to your mobile</p>
+        </div>
+        <div class="otp-group" id="otpGroup">
+          <input type="text" maxlength="1" class="otp-input" oninput="otpNext(this,0)" onkeydown="otpBack(event,this,0)">
+          <input type="text" maxlength="1" class="otp-input" oninput="otpNext(this,1)" onkeydown="otpBack(event,this,1)">
+          <input type="text" maxlength="1" class="otp-input" oninput="otpNext(this,2)" onkeydown="otpBack(event,this,2)">
+          <input type="text" maxlength="1" class="otp-input" oninput="otpNext(this,3)" onkeydown="otpBack(event,this,3)">
+          <input type="text" maxlength="1" class="otp-input" oninput="otpNext(this,4)" onkeydown="otpBack(event,this,4)">
+          <input type="text" maxlength="1" class="otp-input" oninput="otpNext(this,5)" onkeydown="otpBack(event,this,5)">
+        </div>
+        <p style="text-align:center;font-size:.8125rem;color:var(--text-3);margin:1rem 0">Demo: Enter any 6 digits to verify</p>
+        <div id="signupError3" class="auth-error" style="display:none"></div>
+        <button class="btn btn-primary btn-lg" style="width:100%" onclick="completeSignup()"><i class="fa-solid fa-check-circle"></i> Verify & Create Account</button>
+        <div style="text-align:center;margin-top:1rem">
+          <button class="btn btn-ghost btn-sm" onclick="Toast.info('OTP Resent','A new OTP has been sent (demo mode).')">Resend OTP</button>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div id="signupSuccess" style="display:none;text-align:center;padding:2rem 0">
+        <div style="width:80px;height:80px;border-radius:50%;background:rgba(34,197,94,0.1);color:var(--success);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem"><i class="fa-solid fa-circle-check"></i></div>
+        <h2 style="margin-bottom:.5rem">Account Created! 🎉</h2>
+        <p style="color:var(--text-3);margin-bottom:1.5rem">Your parent account is ready. Start adding your children and setting up safe zones.</p>
+        <a href="parent-dashboard.html" class="btn btn-primary btn-lg" style="width:100%"><i class="fa-solid fa-arrow-right"></i> Go to Dashboard</a>
+      </div>
+
+      <div class="auth-footer-text" id="authFooter">
+        Already have an account? <a href="login.html" class="auth-link">Sign In</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script>
+let signupData = {};
+
+function goSignupStep(step, e) {
+  if (e) e.preventDefault();
+
+  if (step === 2) {
+    const name = document.getElementById('signupName').value.trim();
+    const mobile = document.getElementById('signupMobile').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const pw = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('signupConfirm').value;
+
+    if (!Validate.name(name)) { showFieldError('signupName','Name is required'); return; }
+    if (!Validate.email(email)) { showFieldError('signupEmail','Valid email required'); return; }
+    if (!Validate.password(pw)) { showFieldError('signupPassword','Min 8 characters'); return; }
+    if (pw !== confirm) { showFieldError('signupConfirm','Passwords don\'t match'); return; }
+
+    signupData = { ...signupData, full_name: name, mobile, email, password: pw };
+  }
+
+  if (step === 3) {
+    signupData.address = document.getElementById('signupAddress').value.trim();
+    signupData.emergency_name = document.getElementById('signupEmergName').value.trim();
+    signupData.emergency_phone = document.getElementById('signupEmergPhone').value.trim();
+    signupData.emergency_relation = document.getElementById('signupEmergRelation').value;
+  }
+
+  document.querySelectorAll('[id^="signupStep"]').forEach(el => el.style.display = 'none');
+  document.getElementById(`signupStep${step}`).style.display = 'block';
+  document.querySelectorAll('.auth-step').forEach((el, i) => {
+    el.classList.toggle('active', i < step);
+    el.classList.toggle('completed', i < step - 1);
+  });
+
+  if (step === 3) {
+    setTimeout(() => document.querySelector('.otp-input')?.focus(), 100);
+  }
+}
+
+function otpNext(input, idx) {
+  if (input.value.length === 1) {
+    const next = document.querySelectorAll('.otp-input')[idx + 1];
+    if (next) next.focus();
+  }
+}
+
+function otpBack(e, input, idx) {
+  if (e.key === 'Backspace' && input.value === '' && idx > 0) {
+    document.querySelectorAll('.otp-input')[idx - 1].focus();
+  }
+}
+
+function completeSignup() {
+  const otpInputs = document.querySelectorAll('.otp-input');
+  const otp = Array.from(otpInputs).map(i => i.value).join('');
+  if (otp.length !== 6) {
+    const errDiv = document.getElementById('signupError3');
+    errDiv.style.display = 'flex';
+    errDiv.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Please enter all 6 digits';
+    return;
+  }
+
+  const result = CSA.registerParent(signupData);
+  if (result.error) {
+    const errDiv = document.getElementById('signupError3');
+    errDiv.style.display = 'flex';
+    errDiv.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> ${result.error}`;
+    return;
+  }
+
+  // Auto login
+  CSA.loginParent(signupData.email, signupData.password);
+
+  document.getElementById('signupStep3').style.display = 'none';
+  document.getElementById('signupSuccess').style.display = 'block';
+  document.getElementById('authFooter').style.display = 'none';
+  document.querySelectorAll('.auth-step').forEach(el => el.classList.add('completed'));
+  Toast.success('Account Created!', `Welcome, ${result.full_name}!`);
+}
+
+function updateStrength() {
+  const pw = document.getElementById('signupPassword').value;
+  const s = Validate.passwordStrength(pw);
+  const bar = document.getElementById('pwBar');
+  const label = document.getElementById('pwLabel');
+  bar.style.width = s.percent + '%';
+  bar.style.background = s.color;
+  label.textContent = pw.length > 0 ? s.label : '';
+  label.style.color = s.color;
+}
+</script>
+</body>
+</html>

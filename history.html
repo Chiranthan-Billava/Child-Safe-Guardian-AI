@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Child History & Analytics – ChildSafe Alert</title>
+  <meta name="description" content="Detailed child safety history, event timeline, and analytics dashboard.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+<div class="emergency-banner"><i class="fa-solid fa-triangle-exclamation"></i><span>EMERGENCY HELPLINE: <a href="tel:1098">1098</a> &nbsp;|&nbsp; <a href="tel:100">100</a> &nbsp;|&nbsp; <a href="tel:112">112</a></span><i class="fa-solid fa-triangle-exclamation"></i></div>
+<nav class="navbar" style="top:36px"><div class="navbar-inner"><a href="index.html" class="navbar-brand"><div class="brand-icon"><i class="fa-solid fa-shield-heart"></i></div><div class="brand-text"><span class="brand-name">ChildSafe Alert</span><span class="brand-tagline">History & Analytics</span></div></a><nav class="navbar-nav" id="mainNav"></nav><div class="navbar-actions"><div class="parent-avatar" id="navAvatar" onclick="window.location.href='parent-dashboard.html'"></div><button class="btn btn-ghost btn-sm" onclick="CSA.logoutParent();window.location.href='login.html'"><i class="fa-solid fa-right-from-bracket"></i></button><button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button></div></div></nav>
+<div class="mobile-menu" id="mobileMenu"></div>
+
+<div class="page-header" style="margin-top:36px">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="parent-dashboard.html">Dashboard</a><i class="fa-solid fa-chevron-right"></i><span>History & Analytics</span></div>
+    <h1><i class="fa-solid fa-clock-rotate-left" style="margin-right:.5rem"></i> Child History & Analytics</h1>
+    <p>Complete event timeline, safety analytics, and tracking history for your children.</p>
+  </div>
+</div>
+
+<!-- Child Selector + Filter -->
+<div class="history-toolbar">
+  <div class="history-toolbar-inner">
+    <select class="form-select" id="childSelector" onchange="renderHistory()" style="max-width:260px"></select>
+    <div class="tabs" id="historyTabs">
+      <button class="tab-btn active" data-filter="all"><i class="fa-solid fa-list"></i> All</button>
+      <button class="tab-btn" data-filter="tracking"><i class="fa-solid fa-map-location-dot"></i> Tracking</button>
+      <button class="tab-btn" data-filter="geofence"><i class="fa-solid fa-location-crosshairs"></i> GeoFence</button>
+      <button class="tab-btn" data-filter="alert"><i class="fa-solid fa-bell"></i> Alerts</button>
+      <button class="tab-btn" data-filter="recovery"><i class="fa-solid fa-heart"></i> Recovery</button>
+      <button class="tab-btn" data-filter="qr_scan"><i class="fa-solid fa-qrcode"></i> QR Scans</button>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics Cards -->
+<div class="history-analytics" id="analyticsCards"></div>
+
+<!-- Charts + Timeline Layout -->
+<div class="history-layout">
+  <!-- Charts -->
+  <div class="history-charts">
+    <div class="card">
+      <div class="card-header"><h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-chart-bar" style="color:var(--primary);margin-right:.375rem"></i> Event Distribution</h4></div>
+      <div class="card-body" id="eventDistChart"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-chart-pie" style="color:var(--accent);margin-right:.375rem"></i> Safety Breakdown</h4></div>
+      <div class="card-body" id="safetyPieChart"></div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="history-timeline-panel">
+    <div class="card">
+      <div class="card-header"><h4 style="font-size:.9rem;font-weight:700"><i class="fa-solid fa-timeline" style="color:var(--primary);margin-right:.375rem"></i> Event Timeline</h4><span class="text-xs text-muted" id="eventCount">0 events</span></div>
+      <div class="card-body" style="padding:.5rem">
+        <div class="recovery-timeline" id="historyTimeline"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"><div class="footer-bottom"><span>&copy; 2026 ChildSafe Alert &middot; History & Analytics</span><div class="footer-bottom-links"><a href="parent-dashboard.html">Dashboard</a><a href="family-center.html">Family Center</a></div></div></footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/history.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Kiosk – ChildSafe Alert</title>
+  <meta name="description" content="ChildSafe Alert emergency kiosk display for organizers showing active alerts.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="kiosk">
+
+<div class="kiosk-wrapper">
+  <!-- Header -->
+  <div class="kiosk-header">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;color:white;box-shadow:var(--shadow-primary)">
+        <i class="fa-solid fa-shield-heart"></i>
+      </div>
+      <div>
+        <div class="kiosk-title">ChildSafe Alert — Emergency Kiosk</div>
+        <div style="color:rgba(255,255,255,.6);font-size:.875rem">Live Missing Child Alerts · Scan QR to Report Sighting</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:2rem">
+      <div style="text-align:right">
+        <div class="kiosk-clock" id="kioskClock">--:--:--</div>
+        <div style="color:rgba(255,255,255,.5);font-size:.75rem" id="kioskDate"></div>
+      </div>
+      <div style="display:flex;gap:.75rem">
+        <a href="index.html" class="btn btn-outline-white btn-sm"><i class="fa-solid fa-house"></i> Home</a>
+        <button class="btn btn-accent btn-sm" onclick="toggleFullscreen()"><i class="fa-solid fa-expand"></i> Fullscreen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="kiosk-body">
+    <!-- Alerts Panel -->
+    <div class="kiosk-alerts-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div style="color:white;font-size:1.125rem;font-weight:800">
+          <span style="display:inline-block;width:10px;height:10px;background:var(--danger);border-radius:50%;animation:pulse-dot 1s infinite;margin-right:.5rem"></span>
+          ACTIVE MISSING CHILD ALERTS
+        </div>
+        <span style="color:rgba(255,255,255,.7);font-size:.875rem" id="kioskAlertCount">Loading...</span>
+      </div>
+      <div class="kiosk-scroll-area" id="kioskScrollArea">
+        <div class="kiosk-scroll-inner" id="kioskAlertsList"></div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="kiosk-sidebar">
+      <!-- QR Code -->
+      <div class="kiosk-qr-section">
+        <div class="kiosk-qr-label"><i class="fa-solid fa-qrcode"></i> Scan to Report Missing Child</div>
+        <div class="kiosk-qr-box"><div id="kioskQR"></div></div>
+        <div style="color:rgba(255,255,255,.6);font-size:.8rem">report.html</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="kiosk-stat" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08)">
+        <div class="kiosk-stat-value" style="color:#fca5a5" id="kioskActive">0</div>
+        <div class="kiosk-stat-label">Active Alerts</div>
+      </div>
+
+      <div class="kiosk-stat" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)">
+        <div class="kiosk-stat-value" style="color:#86efac">247</div>
+        <div class="kiosk-stat-label">Reunited This Year</div>
+      </div>
+
+      <div class="kiosk-stat">
+        <div class="kiosk-stat-value" id="kioskVols">0</div>
+        <div class="kiosk-stat-label">Active Volunteers</div>
+      </div>
+
+      <!-- Emergency Numbers -->
+      <div style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius);padding:1rem;text-align:center">
+        <div style="color:rgba(255,255,255,.6);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem">Emergency Numbers</div>
+        <div style="color:white;font-size:1.25rem;font-weight:900;margin-bottom:.375rem">📞 1098</div>
+        <div style="color:rgba(255,255,255,.6);font-size:.75rem;margin-bottom:.75rem">Childline (24/7)</div>
+        <div style="color:white;font-size:1.125rem;font-weight:700;margin-bottom:.25rem">📞 100 / 112</div>
+        <div style="color:rgba(255,255,255,.6);font-size:.75rem">Police / Emergency</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="kiosk-footer">
+    <div class="kiosk-emergency">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>CHILDLINE: 1098</span>
+      <span style="opacity:.5">|</span>
+      <span>POLICE: 100</span>
+      <span style="opacity:.5">|</span>
+      <span>EMERGENCY: 112</span>
+    </div>
+    <div style="color:rgba(255,255,255,.4);font-size:.8rem">
+      ChildSafe Alert · Auto-refreshes every 30 seconds · <span id="lastRefresh"></span>
+    </div>
+    <div style="color:rgba(255,255,255,.5);font-size:.8rem">CSE Design Thinking Project</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/kiosk.js"></script>
+</body>
+</html>
